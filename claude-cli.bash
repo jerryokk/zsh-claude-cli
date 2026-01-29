@@ -39,7 +39,6 @@ __claude_cli_toggle_mode() {
         __CLAUDE_CLI_AI_MODE=1
     else
         __CLAUDE_CLI_AI_MODE=0
-        rm -f "$__CLAUDE_CLI_SESSION_FILE" "$__CLAUDE_CLI_ORIGIN_DIR_FILE"
     fi
 }
 

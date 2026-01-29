@@ -164,8 +164,6 @@ __claude_cli_toggle_prefix() {
       CURSOR=0
     fi
     __CLAUDE_CLI_PREFIX_ACTIVE=0
-    # 退出模式时删除会话文件
-    rm -f "$__CLAUDE_CLI_SESSION_FILE"
   else
     BUFFER="${prefix}${BUFFER}"
     CURSOR=$(( CURSOR + prefix_len ))
