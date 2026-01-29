@@ -1,22 +1,26 @@
-# claude-cli Zsh 插件
+# claude-cli Zsh/Bash 插件
 
-`claude-cli` 是一个将 Claude CLI 集成到 Zsh 中的插件。
+`claude-cli` 是一个将 Claude CLI 集成到 Zsh 和 Bash 中的插件。
 
 ## 使用方法
 
-- 在 Zsh 中按 `Ctrl-X` 开始与 Claude CLI 对话。
-- 再次按 `Ctrl-X` 退出 Claude CLI 模式。
+- 在 Zsh/Bash 中按 `Ctrl-X` 切换 AI 模式。
+- AI 模式下，提示符会显示 ✨ 前缀。
+- 在 AI 模式下输入任何内容，将发送给 Claude 处理。
+- 再次按 `Ctrl-X` 退出 AI 模式。
 
 ## 系统要求
 
-- Zsh 5.4+
+- Zsh 5.4+ 或 Bash 4.0+
 - `claude` 命令在 `$PATH` 中可用
 
 ## 安装方法
 
+### Zsh 版本
+
 选择与你的 Zsh 配置相匹配的安装方式。
 
-### 手动安装（`.zshrc`）
+#### 手动安装（`.zshrc`）
 
 ```zsh
 # 克隆到任意目录
@@ -28,7 +32,7 @@ source ~/.zsh/claude-cli/claude-cli.plugin.zsh
 
 打开新的 shell（或执行 `exec zsh`）以激活插件。
 
-### Oh My Zsh
+#### Oh My Zsh
 
 ```zsh
 git clone https://github.com/jerryokk/zsh-claude-cli.git \
@@ -40,33 +44,53 @@ plugins=(... claude-cli)
 
 重新加载 Zsh 以启用插件。
 
-### Antigen
+#### Antigen
 
 ```zsh
 antigen bundle jerryokk/zsh-claude-cli
 antigen apply
 ```
 
-### Zinit
+#### Zinit
 
 ```zsh
 zinit light jerryokk/zsh-claude-cli
 ```
 
-### Znap
+#### Znap
 
 ```zsh
 znap source jerryokk/zsh-claude-cli
 ```
 
-### Fig
+#### Fig
 
 ```zsh
 fig plugin install jerryokk/zsh-claude-cli
 ```
 
-### Zplug
+#### Zplug
 
 ```zsh
 zplug "jerryokk/zsh-claude-cli", as:plugin
 ```
+
+### Bash 版本
+
+对于 Bash 用户，可以使用 `claude-cli.bash`：
+
+```bash
+# 克隆仓库
+git clone https://github.com/jerryokk/zsh-claude-cli.git ~/.bash/claude-cli
+
+# 在 ~/.bashrc 中添加
+source ~/.bash/claude-cli/claude-cli.bash
+```
+
+重新加载 Bash 以启用插件：
+
+```bash
+source ~/.bashrc
+```
+
+**注意**：Bash 版本由于 readline 限制，按 `Ctrl-X` 后需要按 `Enter` 才能看到提示符的变化。
