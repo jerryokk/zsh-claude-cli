@@ -110,3 +110,26 @@ source ~/.bashrc
 ```
 
 **注意**：Bash 版本由于 readline 限制，按 `Ctrl-X` 后需要按 `Enter` 才能看到提示符的变化。
+
+### PowerShell 版本
+
+对于 PowerShell 用户，可以使用 `claude-cli.ps1`：
+
+```powershell
+# 克隆仓库
+git clone https://github.com/jerryokk/zsh-claude-cli.git $HOME\Documents\PowerShell\Modules\claude-cli
+
+# 在 PowerShell 配置文件中添加
+# 查找配置文件位置：$PROFILE
+# 如果文件不存在，创建它：New-Item -Path $PROFILE -Type File -Force
+
+. $HOME\Documents\PowerShell\Modules\claude-cli\claude-cli.ps1
+```
+
+重新加载 PowerShell 配置：
+
+```powershell
+. $PROFILE
+```
+
+或者打开新的 PowerShell 窗口以激活插件。
