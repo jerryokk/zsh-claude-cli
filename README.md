@@ -1,16 +1,16 @@
-# kimi-cli Zsh Plugin
+# claude-cli Zsh Plugin
 
-`kimi-cli` Zsh plugin is a Zsh plugin that integrate Kimi CLI into Zsh.
+`claude-cli` Zsh plugin is a Zsh plugin that integrate Claude CLI into Zsh.
 
 ## Usage
 
-- Press `Ctrl-X` in Zsh to start talking to Kimi CLI.
-- Press `Ctrl-X` again to exit Kimi CLI mode.
+- Press `Ctrl-X` in Zsh to start talking to Claude CLI.
+- Press `Ctrl-X` again to exit Claude CLI mode.
 
 ## Requirements
 
 - Zsh 5.4+
-- `kimi` binary available in `$PATH`
+- `claude` binary available in `$PATH`
 
 ## Installation
 
@@ -20,10 +20,10 @@ Pick the method that matches your Zsh setup.
 
 ```zsh
 # clone anywhere you prefer
-git clone https://github.com/MoonshotAI/zsh-kimi-cli.git ~/.zsh/kimi-cli
+git clone https://github.com/jerryokk/zsh-claude-cli.git ~/.zsh/claude-cli
 
 # load the plugin in .zshrc
-source ~/.zsh/kimi-cli/kimi-cli.plugin.zsh
+source ~/.zsh/claude-cli/claude-cli.plugin.zsh
 ```
 
 Open a new shell (or `exec zsh`) to activate the handler.
@@ -31,11 +31,11 @@ Open a new shell (or `exec zsh`) to activate the handler.
 ### Oh My Zsh
 
 ```zsh
-git clone https://github.com/MoonshotAI/zsh-kimi-cli.git \
-  ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/kimi-cli
+git clone https://github.com/jerryokk/zsh-claude-cli.git \
+  ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/claude-cli
 
 # in ~/.zshrc
-plugins=(... kimi-cli)
+plugins=(... claude-cli)
 ```
 
 Reload Zsh to pick up the plugin.
@@ -43,30 +43,30 @@ Reload Zsh to pick up the plugin.
 ### Antigen
 
 ```zsh
-antigen bundle MoonshotAI/zsh-kimi-cli
+antigen bundle jerryokk/zsh-claude-cli
 antigen apply
 ```
 
 ### Zinit
 
 ```zsh
-zinit light MoonshotAI/zsh-kimi-cli
+zinit light jerryokk/zsh-claude-cli
 ```
 
 ### Znap
 
 ```zsh
-znap source MoonshotAI/zsh-kimi-cli
+znap source jerryokk/zsh-claude-cli
 ```
 
 ### Fig
 
 ```zsh
-fig plugin install MoonshotAI/zsh-kimi-cli
+fig plugin install jerryokk/zsh-claude-cli
 ```
 
 ### Zplug
 
 ```zsh
-zplug "MoonshotAI/zsh-kimi-cli", as:plugin
+zplug "jerryokk/zsh-claude-cli", as:plugin
 ```
