@@ -16,8 +16,11 @@ typeset -gA __CLAUDE_CLI_GUARD_WIDGET_ALIASES=()
 # 使用 ZSH_SUBSHELL 和 $$ 的组合确保在主 shell 和子 shell 中都能访问同一文件
 typeset -g __CLAUDE_CLI_SESSION_FILE="/tmp/.claude-cli-session-${$}"
 
+# 记录原始启动目录
+typeset -g __CLAUDE_CLI_ORIGIN_DIR_FILE="/tmp/.claude-cli-origin-dir-${$}"
+
 # 使用 trap 确保 shell 退出时清理会话文件
-trap "rm -f '$__CLAUDE_CLI_SESSION_FILE' 2>/dev/null" EXIT
+trap "rm -f '$__CLAUDE_CLI_SESSION_FILE' '$__CLAUDE_CLI_ORIGIN_DIR_FILE' 2>/dev/null" EXIT
 
 if (( $+functions[command_not_found_handler] )); then
   functions[__claude_cli_original_command_not_found_handler]=$functions[command_not_found_handler]
@@ -97,19 +100,54 @@ command_not_found_handler() {
   full_cmd="$(printf '%q ' "${effective_cmd[@]}")"
   full_cmd="${full_cmd% }"
 
+  # 记录或读取原始目录
+  local origin_dir=""
+  if (( session_started == 0 )); then
+    # 第一次启动，记录当前目录
+    origin_dir="$PWD"
+    echo "$origin_dir" > "$__CLAUDE_CLI_ORIGIN_DIR_FILE"
+  else
+    # 读取原始目录
+    if [[ -f "$__CLAUDE_CLI_ORIGIN_DIR_FILE" ]]; then
+      origin_dir=$(cat "$__CLAUDE_CLI_ORIGIN_DIR_FILE")
+    else
+      origin_dir="$PWD"
+    fi
+  fi
+
+  # 保存当前目录
+  local current_dir="$PWD"
+  
+  # 如果当前目录与原始目录不同，在命令后附加当前目录信息
+  if [[ "$current_dir" != "$origin_dir" ]]; then
+    full_cmd="$full_cmd (当前工作目录: $current_dir)"
+  fi
+  
+  # 临时切换到原始目录（如果不同）
+  if [[ "$current_dir" != "$origin_dir" ]]; then
+    cd "$origin_dir" 2>/dev/null || true
+  fi
+
   # 第一次使用 --session-id，后续使用 --resume
+  local ret
   if (( session_started == 0 )); then
     claude --dangerously-skip-permissions --session-id "$session_id" -p "$full_cmd"
-    local ret=$?
+    ret=$?
     session_started=1
     # 保存会话信息到文件
     echo "session_id='$session_id'" > "$__CLAUDE_CLI_SESSION_FILE"
     echo "session_started=$session_started" >> "$__CLAUDE_CLI_SESSION_FILE"
-    return $ret
   else
     claude --dangerously-skip-permissions --resume "$session_id" -p "$full_cmd"
-    return $?
+    ret=$?
   fi
+
+  # 返回原始工作目录
+  if [[ "$current_dir" != "$origin_dir" ]]; then
+    cd "$current_dir" 2>/dev/null || true
+  fi
+
+  return $ret
 }
 
 __claude_cli_toggle_prefix() {

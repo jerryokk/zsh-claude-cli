@@ -9,6 +9,7 @@ fi
 # 全局变量
 __CLAUDE_CLI_AI_MODE=0
 __CLAUDE_CLI_SESSION_FILE="/tmp/.claude-session-$$"
+__CLAUDE_CLI_ORIGIN_DIR_FILE="/tmp/.claude-origin-dir-$$"
 
 # 动态设置提示符
 __claude_cli_set_prompt() {
@@ -38,7 +39,7 @@ __claude_cli_toggle_mode() {
         __CLAUDE_CLI_AI_MODE=1
     else
         __CLAUDE_CLI_AI_MODE=0
-        rm -f "$__CLAUDE_CLI_SESSION_FILE"
+        rm -f "$__CLAUDE_CLI_SESSION_FILE" "$__CLAUDE_CLI_ORIGIN_DIR_FILE"
     fi
 }
 
@@ -70,16 +71,50 @@ command_not_found_handle() {
             session_started=0
         fi
         
+        # 记录或读取原始目录
+        local origin_dir=""
+        if [ "$session_started" = "0" ]; then
+            # 第一次启动，记录当前目录
+            origin_dir="$PWD"
+            echo "$origin_dir" > "$__CLAUDE_CLI_ORIGIN_DIR_FILE"
+        else
+            # 读取原始目录
+            if [ -f "$__CLAUDE_CLI_ORIGIN_DIR_FILE" ]; then
+                origin_dir=$(cat "$__CLAUDE_CLI_ORIGIN_DIR_FILE")
+            else
+                origin_dir="$PWD"
+            fi
+        fi
+        
+        # 保存当前目录
+        local current_dir="$PWD"
+        
+        # 如果当前目录与原始目录不同，在命令后附加当前目录信息
+        if [ "$current_dir" != "$origin_dir" ]; then
+            full_cmd="$full_cmd (当前工作目录: $current_dir)"
+        fi
+        
+        # 临时切换到原始目录（如果不同）
+        if [ "$current_dir" != "$origin_dir" ]; then
+            cd "$origin_dir" 2>/dev/null || true
+        fi
+        
         if [ "$session_started" = "0" ]; then
             claude --dangerously-skip-permissions --session-id "$session_id" -p "$full_cmd"
             local ret=$?
             echo "session_id='$session_id'" > "$__CLAUDE_CLI_SESSION_FILE"
             echo "session_started=1" >> "$__CLAUDE_CLI_SESSION_FILE"
-            return $ret
         else
             claude --dangerously-skip-permissions --resume "$session_id" -p "$full_cmd"
-            return $?
+            ret=$?
         fi
+        
+        # 返回原始工作目录
+        if [ "$current_dir" != "$origin_dir" ]; then
+            cd "$current_dir" 2>/dev/null || true
+        fi
+        
+        return $ret
     else
         echo "bash: $1: command not found" >&2
         return 127
@@ -87,4 +122,4 @@ command_not_found_handle() {
 }
 
 # 清理函数
-trap "rm -f '$__CLAUDE_CLI_SESSION_FILE' 2>/dev/null" EXIT
+trap "rm -f '$__CLAUDE_CLI_SESSION_FILE' '$__CLAUDE_CLI_ORIGIN_DIR_FILE' 2>/dev/null" EXIT
