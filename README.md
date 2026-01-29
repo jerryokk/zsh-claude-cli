@@ -1,32 +1,32 @@
-# claude-cli Zsh Plugin
+# claude-cli Zsh 插件
 
-`claude-cli` Zsh plugin is a Zsh plugin that integrate Claude CLI into Zsh.
+`claude-cli` 是一个将 Claude CLI 集成到 Zsh 中的插件。
 
-## Usage
+## 使用方法
 
-- Press `Ctrl-X` in Zsh to start talking to Claude CLI.
-- Press `Ctrl-X` again to exit Claude CLI mode.
+- 在 Zsh 中按 `Ctrl-X` 开始与 Claude CLI 对话。
+- 再次按 `Ctrl-X` 退出 Claude CLI 模式。
 
-## Requirements
+## 系统要求
 
 - Zsh 5.4+
-- `claude` binary available in `$PATH`
+- `claude` 命令在 `$PATH` 中可用
 
-## Installation
+## 安装方法
 
-Pick the method that matches your Zsh setup.
+选择与你的 Zsh 配置相匹配的安装方式。
 
-### Manual (`.zshrc`)
+### 手动安装（`.zshrc`）
 
 ```zsh
-# clone anywhere you prefer
+# 克隆到任意目录
 git clone https://github.com/jerryokk/zsh-claude-cli.git ~/.zsh/claude-cli
 
-# load the plugin in .zshrc
+# 在 .zshrc 中加载插件
 source ~/.zsh/claude-cli/claude-cli.plugin.zsh
 ```
 
-Open a new shell (or `exec zsh`) to activate the handler.
+打开新的 shell（或执行 `exec zsh`）以激活插件。
 
 ### Oh My Zsh
 
@@ -34,11 +34,11 @@ Open a new shell (or `exec zsh`) to activate the handler.
 git clone https://github.com/jerryokk/zsh-claude-cli.git \
   ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/claude-cli
 
-# in ~/.zshrc
+# 在 ~/.zshrc 中添加
 plugins=(... claude-cli)
 ```
 
-Reload Zsh to pick up the plugin.
+重新加载 Zsh 以启用插件。
 
 ### Antigen
 
